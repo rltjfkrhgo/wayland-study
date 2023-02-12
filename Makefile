@@ -1,6 +1,6 @@
 CC = g++
 
-all: server client
+all: server globals
 
 server: server.cpp
 	$(CC) -o $@ $< -lwayland-server
@@ -8,5 +8,8 @@ server: server.cpp
 client: client.cpp
 	$(CC) -o $@ $< -lwayland-client
 
+globals: globals.cpp
+	$(CC) -o $@ $< -lwayland-client
+
 clean:
-	rm -rf *.o server client
+	rm -rf *.o server client globals
