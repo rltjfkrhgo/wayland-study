@@ -1,29 +1,23 @@
-// https://wayland-book.com/
+// https://wayland-book.com/registry/binding.html
 
 #include <iostream>
 #include <wayland-client.h>
 
-static void registry_handle_global(void* data, 
-                                   struct wl_registry* registry, 
-                                   uint32_t name, 
-                                   const char* interface, 
-                                   uint32_t version)
+static void registryHandleGlobal(void* data, 
+                                 struct wl_registry* registry, 
+                                 uint32_t name, 
+                                 const char* interface, 
+                                 uint32_t version)
 {
     std::cout << "interface: " << interface << ", version: " << version << 
                  ", name: " << name << std::endl;
 }
 
-static void registry_handle_global_remove(void* data, 
-                                          struct wl_registry* registry, 
-                                          uint32_t name)
+static void registryHandleGlobalRemove(void* data, 
+                                       struct wl_registry* registry, 
+                                       uint32_t name)
 {
 }
-
-static const struct wl_registry_listener registry_listener
-{
-    .global = registry_handle_global, 
-    .global_remove = registry_handle_global_remove, 
-};
 
 int main()
 {
@@ -80,7 +74,13 @@ S->C    00000002  001C  0000
         [...]
 */
 
-    wl_registry_add_listener(registry, &registry_listener, NULL);
+    static const struct wl_registry_listener registryListener
+    {
+        // registryHandleGlobal로 global event를 수신한다.
+        .global = registryHandleGlobal, 
+        .global_remove = registryHandleGlobalRemove, 
+    };
+    wl_registry_add_listener(registry, &registryListener, NULL);
 
     wl_display_roundtrip(display);
 
